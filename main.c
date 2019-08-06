@@ -17,18 +17,18 @@
 int		main(int argc, char **argv)
 {
 	int		fd;
-	char		*line;
+	char	*line;
 	int		i;
+	int		n;
 
-	(void)argv;
 	if (argc == 2)
 	{
 		fd = open("fichiertxt", O_RDONLY);
 		i = 0;
-		while (i < (atoi(argv[1])))
+		n = atoi(argv[1]);
+		while (i < n)
 		{
 			i++;
-			//get_next_line(fd, &line);
 			printf("return_var = [%d]\t--->\t(1 = line read, 0 = EOF, -1 = Error)\n", get_next_line(fd, &line));
 			printf("\nLINE = \"%s\"\n---------------------------------\n", line);
 		}

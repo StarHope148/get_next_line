@@ -16,9 +16,16 @@
 # include <sys/uio.h>
 # include <unistd.h>
 # include <stdlib.h>
-# include "libft/libft.h"
+# include ".lib/libft.h"
 # include <stdio.h>
 # define BUFF_SIZE 32
+
+typedef struct      s_read
+{
+    int             fd;
+    char            *content;
+    struct s_read   *next;
+}                   t_read;
 
 int		get_next_line(const int fd, char **line);
 
