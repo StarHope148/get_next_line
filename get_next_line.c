@@ -6,7 +6,7 @@
 /*   By: jcanteau <jcanteau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/24 10:39:31 by jcanteau          #+#    #+#             */
-/*   Updated: 2019/08/08 17:31:11 by jcanteau         ###   ########.fr       */
+/*   Updated: 2019/08/08 19:47:08 by jcanteau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	ft_check_newline(char *str)
 			return (i);
 		i++;
 	}
-	return (i);
+	return (-1);
 }
 
 static int	ft_readline(char **str, int fd, char **line)
@@ -31,6 +31,7 @@ static int	ft_readline(char **str, int fd, char **line)
 	char		buff[BUFF_SIZE];
 	int			ret;
 	char		*str_tmp;
+	int			nl;
 
 	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
 	{
@@ -44,11 +45,18 @@ static int	ft_readline(char **str, int fd, char **line)
 	}
 	if (ret == -1)
 		return (-1);
-	if (ft_strlen(*str) == 0)
+	if (*str == NULL || ft_strlen(*str) == 0 )
 		return (0);
-	*line = ft_strsub(*str, 0, ft_check_newline(*str));
-	str_tmp = ft_strsub(*str, ft_check_newline(*str) + 1,
-	ft_strlen(*str) - ft_check_newline(*str) - 1);
+	nl = ft_check_newline(*str);
+	if (nl == -1)
+	{
+		*line = ft_strsub(*str, 0, ft_strlen(*str));
+		free(*str);
+		*str = NULL;
+		return (1);
+	}
+	*line = ft_strsub(*str, 0, nl);
+	str_tmp = ft_strsub(*str, nl + 1, ft_strlen(*str) - nl - 1);
 	free(*str);
 	*str = str_tmp;
 	return (1);
@@ -58,7 +66,7 @@ int			get_next_line(const int fd, char **line)
 {
 	static char	*str = NULL;
 
-	if (fd == -1 || line == NULL || BUFF_SIZE <= 0)
+	if (fd == -1 || line == NULL)
 		return (-1);
 	return (ft_readline(&str, fd, line));
 }
