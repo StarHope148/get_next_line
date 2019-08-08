@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcanteau <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jcanteau <jcanteau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/29 17:16:41 by jcanteau          #+#    #+#             */
-/*   Updated: 2019/07/16 16:20:51 by jcanteau         ###   ########.fr       */
+/*   Updated: 2019/08/08 17:22:48 by jcanteau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int		main(int argc, char **argv)
 	char	*line;
 	int		i;
 	int		n;
+	int		val;
 
 	if (argc == 2)
 	{
@@ -29,8 +30,14 @@ int		main(int argc, char **argv)
 		while (i < n)
 		{
 			i++;
-			printf("return_var = [%d]\t--->\t(1 = line read, 0 = EOF, -1 = Error)\n", get_next_line(fd, &line));
+			val = get_next_line(fd, &line);
+			printf("return_var = [%d]\t--->\t(1 = line read, 0 = EOF, -1 = Error)\n", val);
 			printf("\nLINE = \"%s\"\n---------------------------------\n", line);
+			if (line)
+			{
+				free(line);
+				line = NULL;
+			}
 		}
 		close(fd);
 	}
