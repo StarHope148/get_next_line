@@ -6,7 +6,7 @@
 /*   By: jcanteau <jcanteau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/29 17:16:41 by jcanteau          #+#    #+#             */
-/*   Updated: 2019/08/08 19:36:03 by jcanteau         ###   ########.fr       */
+/*   Updated: 2019/08/12 00:05:18 by jcanteau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		main(int argc, char **argv)
 
 	if (argc == 2)
 	{
-		fd = open("testtxt", O_RDONLY);
+		fd = open("fichiertxt2", O_RDONLY);
 		i = 0;
 		n = atoi(argv[1]);
 		while (i < n)

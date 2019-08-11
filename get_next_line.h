@@ -6,7 +6,7 @@
 /*   By: jcanteau <jcanteau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/29 17:11:24 by jcanteau          #+#    #+#             */
-/*   Updated: 2019/08/08 19:29:33 by jcanteau         ###   ########.fr       */
+/*   Updated: 2019/08/11 17:27:31 by jcanteau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@
 typedef struct	s_read
 {
 	int				fd;
-	char			*content;
+	char			*str;
+	int				nl;
 	struct s_read	*next;
 }				t_read;
 
