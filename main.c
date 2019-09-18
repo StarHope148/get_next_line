@@ -6,7 +6,7 @@
 /*   By: jcanteau <jcanteau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/29 17:16:41 by jcanteau          #+#    #+#             */
-/*   Updated: 2019/08/28 19:29:51 by jcanteau         ###   ########.fr       */
+/*   Updated: 2019/09/18 17:13:54 by jcanteau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,15 @@ int		main(int argc, char **argv)
 {
 	int		fd;
 	char	*line;
-	int		i;
 	int		n;
 	int		val;
 
 	if (argc == 2)
 	{
 		fd = open("testtxt", O_RDONLY);
-		i = 0;
 		n = atoi(argv[1]);
-		while (i < n)
+		while (n--)
 		{
-			i++;
 			val = get_next_line(fd, &line);
 			printf("return_var = [%d]\t--->\t(1 = line read, 0 = EOF, -1 = Error)\n", val);
 			printf("\nLINE = \"%s\"\n---------------------------------\n", line);
