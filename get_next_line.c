@@ -6,7 +6,7 @@
 /*   By: jcanteau <jcanteau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/11 15:58:26 by jcanteau          #+#    #+#             */
-/*   Updated: 2019/09/21 18:57:26 by jcanteau         ###   ########.fr       */
+/*   Updated: 2019/09/21 18:59:16 by jcanteau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ static int		ft_fill_line(t_read *d, char **line)
 	}
 	if ((*line = ft_strsub(d->str, 0, d->nl)) == NULL)
 		return (-1);
-	if (!(str_tmp = ft_strsub(d->str, d->nl + 1, ft_strlen(d->str) - d->nl - 1)))
+	str_tmp = ft_strsub(d->str, d->nl + 1, ft_strlen(d->str) - d->nl - 1);
+	if (str_tmp == NULL)
 		return (-1);
 	free(d->str);
 	d->str = str_tmp;
