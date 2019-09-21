@@ -6,7 +6,7 @@
 /*   By: jcanteau <jcanteau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/29 17:11:24 by jcanteau          #+#    #+#             */
-/*   Updated: 2019/09/18 21:16:15 by jcanteau         ###   ########.fr       */
+/*   Updated: 2019/09/21 18:10:03 by jcanteau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,11 @@
 # include <stdlib.h>
 # include "libft/libft.h"
 # include <stdio.h>
-# define BUFF_SIZE 16
+# define BUFF_SIZE 32
+# define NO_NL -1
+# define DONE 0
+# define NOT_DONE 1
+# define NOT_INIT -1
 
 typedef struct	s_read
 {

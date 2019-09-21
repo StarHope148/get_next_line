@@ -6,30 +6,30 @@
 /*   By: jcanteau <jcanteau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/11 15:58:26 by jcanteau          #+#    #+#             */
-/*   Updated: 2019/09/18 21:16:39 by jcanteau         ###   ########.fr       */
+/*   Updated: 2019/09/21 18:09:15 by jcanteau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static void	*ft_init_struct(t_read *p, int fd)
+static t_read	*ft_init_struct(t_read *p, int fd)
 {
 	if ((p->next = malloc(sizeof(t_read))) == NULL)
 		return (NULL);
 	p->next->fd = fd;
 	p->next->str = NULL;
-	p->next->nl = -1;
-	p->next->state = 1;
+	p->next->nl = NO_NL;
+	p->next->state = NOT_DONE;
 	p->next->next = NULL;
 	return (p);
 }
 
-static int	ft_check_newline(char *str)
+static int		ft_check_newline(char *str)
 {
 	int				i;
 
 	if (!str)
-		return (-1);
+		return (NO_NL);
 	i = 0;
 	while (str[i])
 	{
@@ -37,25 +37,25 @@ static int	ft_check_newline(char *str)
 			return (i);
 		i++;
 	}
-	return (-1);
+	return (NO_NL);
 }
 
-static int	ft_fill_line(t_read *d, char **line)
+static int		ft_fill_line(t_read *d, char **line)
 {
 	char			*str_tmp;
 
-	if (d->nl == -1)
+	if (d->nl == NO_NL)
 	{
 		if (d->str[0] == '\0')
 		{
 			free(d->str);
 			d->str = NULL;
-			d->fd = -1;
-			d->nl = -1;
-			d->state = 1;
+			d->fd = NOT_INIT;
+			d->nl = NO_NL;
+			d->state = NOT_DONE;
 			return (0);
 		}
-		*line = ft_strsub(d->str, 0, ft_strlen(d->str));
+		*line = ft_strdup(d->str);
 		free(d->str);
 		d->str = NULL;
 		return (1);
@@ -67,37 +67,39 @@ static int	ft_fill_line(t_read *d, char **line)
 	return (1);
 }
 
-static int	ft_retrieve_line(t_read *d, char **line)
+static int		ft_retrieve_line(t_read *d, char **line)
 {
 	char			buff[BUFF_SIZE + 1];
 	char			*str_tmp;
 	int				ret;
 
-	while ((d->nl = ft_check_newline(d->str)) == -1 && d->state)
+	d->nl = ft_check_newline(d->str);
+	while (d->nl == NO_NL && d->state == NOT_DONE)
 	{
 		if ((ret = read(d->fd, buff, BUFF_SIZE)) == -1)
 			return (-1);
 		if (ret < BUFF_SIZE)
-			d->state = 0;
+			d->state = DONE;
 		buff[ret] = '\0';
 		str_tmp = ft_strjoin(d->str, buff);
 		free(d->str);
 		d->str = str_tmp;
+		d->nl = ft_check_newline(d->str);
 	}
 	return (ft_fill_line(d, line));
 }
 
-int			get_next_line(const int fd, char **line)
+int				get_next_line(const int fd, char **line)
 {
 	static t_read	data = {NULL, NULL, -1, 1, -1};
 	t_read			*p;
 
 	p = &data;
-	if (fd < 0 || line == NULL)
+	if (fd < 0 || line == NULL || BUFF_SIZE <= 0)
 		return (-1);
 	while (p->fd != fd)
 	{
-		if (p->fd == -1)
+		if (p->fd == NOT_INIT)
 			p->fd = fd;
 		else if (!p->next)
 		{
@@ -108,7 +110,7 @@ int			get_next_line(const int fd, char **line)
 		else
 			p = p->next;
 	}
-	if (p->state == 0 && !p->str)
+	if (p->state == DONE && !p->str)
 		return (0);
 	return (ft_retrieve_line(p, line));
 }
