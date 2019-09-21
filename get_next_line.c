@@ -6,7 +6,7 @@
 /*   By: jcanteau <jcanteau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/11 15:58:26 by jcanteau          #+#    #+#             */
-/*   Updated: 2019/08/28 19:27:29 by jcanteau         ###   ########.fr       */
+/*   Updated: 2019/09/21 16:52:12 by jcanteau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int			get_next_line(const int fd, char **line)
 	t_read			*p;
 
 	p = &data;
-	if (fd < 0 || line == NULL)
+	if (fd < 0 || line == NULL || BUFF_SIZE <= 0)
 		return (-1);
 	while (p->fd != fd)
 	{
