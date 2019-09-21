@@ -6,7 +6,7 @@
 /*   By: jcanteau <jcanteau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/29 17:11:24 by jcanteau          #+#    #+#             */
-/*   Updated: 2019/08/28 17:12:03 by jcanteau         ###   ########.fr       */
+/*   Updated: 2019/09/18 21:16:15 by jcanteau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,15 @@
 # include <stdlib.h>
 # include "libft/libft.h"
 # include <stdio.h>
-# define BUFF_SIZE 32
+# define BUFF_SIZE 16
 
 typedef struct	s_read
 {
-	int				fd;
 	char			*str;
-	int				nl;
-	int				state;
 	struct s_read	*next;
+	ssize_t			nl;
+	int				state;
+	int				fd;
 }				t_read;
 
 int				get_next_line(const int fd, char **line);

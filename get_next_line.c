@@ -6,7 +6,7 @@
 /*   By: jcanteau <jcanteau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/11 15:58:26 by jcanteau          #+#    #+#             */
-/*   Updated: 2019/09/21 16:52:12 by jcanteau         ###   ########.fr       */
+/*   Updated: 2019/09/18 21:16:39 by jcanteau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,28 +80,20 @@ static int	ft_retrieve_line(t_read *d, char **line)
 		if (ret < BUFF_SIZE)
 			d->state = 0;
 		buff[ret] = '\0';
-		if (!d->str)
-		{
-			if ((d->str = ft_strdup(buff)) == NULL)
-				return (-1);
-		}
-		else
-		{
-			str_tmp = ft_strjoin(d->str, buff);
-			free(d->str);
-			d->str = str_tmp;
-		}
+		str_tmp = ft_strjoin(d->str, buff);
+		free(d->str);
+		d->str = str_tmp;
 	}
 	return (ft_fill_line(d, line));
 }
 
 int			get_next_line(const int fd, char **line)
 {
-	static t_read	data = {-1, NULL, -1, 1, NULL};
+	static t_read	data = {NULL, NULL, -1, 1, -1};
 	t_read			*p;
 
 	p = &data;
-	if (fd < 0 || line == NULL || BUFF_SIZE <= 0)
+	if (fd < 0 || line == NULL)
 		return (-1);
 	while (p->fd != fd)
 	{
