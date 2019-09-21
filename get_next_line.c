@@ -6,21 +6,22 @@
 /*   By: jcanteau <jcanteau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/11 15:58:26 by jcanteau          #+#    #+#             */
-/*   Updated: 2019/09/21 18:09:15 by jcanteau         ###   ########.fr       */
+/*   Updated: 2019/09/21 18:57:26 by jcanteau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static t_read	*ft_init_struct(t_read *p, int fd)
+static void		*ft_init_struct(t_read *p, int fd)
 {
-	if ((p->next = malloc(sizeof(t_read))) == NULL)
-		return (NULL);
-	p->next->fd = fd;
-	p->next->str = NULL;
-	p->next->nl = NO_NL;
-	p->next->state = NOT_DONE;
-	p->next->next = NULL;
+	if (p == NULL)
+		if ((p = malloc(sizeof(t_read))) == NULL)
+			return (NULL);
+	p->fd = fd;
+	p->str = NULL;
+	p->nl = NO_NL;
+	p->state = NOT_DONE;
+	p->next = NULL;
 	return (p);
 }
 
@@ -49,19 +50,19 @@ static int		ft_fill_line(t_read *d, char **line)
 		if (d->str[0] == '\0')
 		{
 			free(d->str);
-			d->str = NULL;
-			d->fd = NOT_INIT;
-			d->nl = NO_NL;
-			d->state = NOT_DONE;
+			ft_init_struct(d, NOT_INIT);
 			return (0);
 		}
-		*line = ft_strdup(d->str);
+		if (((*line = ft_strdup(d->str))) == NULL)
+			return (-1);
 		free(d->str);
 		d->str = NULL;
 		return (1);
 	}
-	*line = ft_strsub(d->str, 0, d->nl);
-	str_tmp = ft_strsub(d->str, d->nl + 1, ft_strlen(d->str) - d->nl - 1);
+	if ((*line = ft_strsub(d->str, 0, d->nl)) == NULL)
+		return (-1);
+	if (!(str_tmp = ft_strsub(d->str, d->nl + 1, ft_strlen(d->str) - d->nl - 1)))
+		return (-1);
 	free(d->str);
 	d->str = str_tmp;
 	return (1);
@@ -81,7 +82,8 @@ static int		ft_retrieve_line(t_read *d, char **line)
 		if (ret < BUFF_SIZE)
 			d->state = DONE;
 		buff[ret] = '\0';
-		str_tmp = ft_strjoin(d->str, buff);
+		if ((str_tmp = ft_strjoin(d->str, buff)) == NULL)
+			return (-1);
 		free(d->str);
 		d->str = str_tmp;
 		d->nl = ft_check_newline(d->str);
@@ -101,16 +103,16 @@ int				get_next_line(const int fd, char **line)
 	{
 		if (p->fd == NOT_INIT)
 			p->fd = fd;
-		else if (!p->next)
+		else if (p->next == NULL)
 		{
-			if ((ft_init_struct(p, fd)) == NULL)
+			if ((p->next = ft_init_struct(p->next, fd)) == NULL)
 				return (-1);
 			p = p->next;
 		}
 		else
 			p = p->next;
 	}
-	if (p->state == DONE && !p->str)
+	if (p->state == DONE && p->str == NULL)
 		return (0);
 	return (ft_retrieve_line(p, line));
 }
